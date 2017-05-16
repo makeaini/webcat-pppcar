@@ -1,0 +1,48 @@
+package com.pppcar.serlvet;
+
+import java.security.MessageDigest;
+
+/**
+ * <p>Title: SHA1算法</p>
+ *
+ * @author qsyang<yangqisheng274@163.com>
+ */
+public final class SHA1 {
+
+    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5',
+                           '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+    /**
+     * Takes the raw bytes from the digest and formats them correct.
+     *
+     * @param bytes the raw bytes from the digest.
+     * @return the formatted bytes.
+     */
+    private static String getFormattedText(byte[] bytes) {
+        int len = bytes.length;
+        StringBuilder buf = new StringBuilder(len * 2);
+        // 把密文转换成十六进制的字符串形式
+        for (int j = 0; j < len; j++) {
+            buf.append(HEX_DIGITS[(bytes[j] >> 4) & 0x0f]);
+            buf.append(HEX_DIGITS[bytes[j] & 0x0f]);
+        }
+        return buf.toString();
+    }
+
+    public static String encode(String str) {
+        if (str == null) {
+            return null;
+        }
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
+            messageDigest.update(str.getBytes());
+            return getFormattedText(messageDigest.digest());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void main(String[] args) {
+    	String s=encode("jsapi_ticket=sM4AOVdWfPE4DxkXGEs8VOPfeEoqfpfzUunNx6ym6pq7IMCqK8KPjBIWTtbVLLwoaRqQbEe5VvnYJwTc3qbUjw&noncestr=grbgdakmur68e253thvjz9o3lyirsnyi&timestamp=1442388788&url=http://31c203ee.ngrok.io/webcat-pppcar/servlet/share");
+    	System.out.println(s);
+    }
+}
